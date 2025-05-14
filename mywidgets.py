@@ -1,6 +1,31 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QGridLayout
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton
+from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QPoint
 import datetime
+
+class SlideMenu(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.init_ui()
+        self.hide()
+
+    def init_ui(self):
+        # Настройка внешнего вида меню
+        self.setGeometry(0, 0, self.parent.width(), 50)
+        self.setStyleSheet("background: #3498db; border-bottom: 2px solid #2980b9;")
+
+        # Кнопка для демонстрации функционала
+        btn = QPushButton("Следующая страница", self)
+        btn.clicked.connect(self.parent.switch_page)
+        btn.setStyleSheet('''
+            background-color: #f7fafa;
+            color: blue;
+            padding: 10px;
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 20px;
+             ''')
 
 
 class RightWidget(QWidget):
@@ -98,3 +123,29 @@ class RightWidget(QWidget):
         tm2 = str(datetime.datetime.now().date())
         self.lbl_time.setText(f'{tm}')
         self.lbl_time2.setText(f'{tm2}')
+
+class SettingWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+        self.setMouseTracking(True)
+        
+    def init_ui(self):
+        self.layout = QVBoxLayout()
+        self.lbl = QLabel(f"Страница настройки", alignment=Qt.AlignCenter)
+        self.lbl.setStyleSheet('''
+            background-color: #f7fafa;
+            color: blue;
+            padding: 10px;
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 20px;
+             ''')
+        self.lbl.setMouseTracking(True)
+        self.layout.addWidget(self.lbl)
+        self.setLayout(self.layout)
+
+       
+
+    
