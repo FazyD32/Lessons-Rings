@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QTimeEdit
 from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QPoint
 import datetime
 
@@ -11,14 +11,14 @@ class SlideMenu(QWidget):
 
     def init_ui(self):
         # Настройка внешнего вида меню
-        self.setGeometry(0, 0, self.parent.width(), 50)
+        self.setGeometry(6, 6, self.parent.width(), 50)
         self.setStyleSheet("background: #3498db; border-bottom: 2px solid #2980b9;")
 
         # Кнопка для демонстрации функционала
         btn = QPushButton("Следующая страница", self)
         btn.clicked.connect(self.parent.switch_page)
         btn.setStyleSheet('''
-            background-color: #f7fafa;
+            background-color: #252932;
             color: #FED32C;
             padding: 10px;
             border: 3px solid #E6C02C;
@@ -130,20 +130,38 @@ class SettingWidget(QWidget):
         self.setMouseTracking(True)
         
     def init_ui(self):
-        self.layout = QVBoxLayout()
-        self.lbl = QLabel(f"Страница настройки", alignment=Qt.AlignCenter)
-        self.lbl.setStyleSheet('''
-            background-color: #f7fafa;
-            color: blue;
+        self.settingboxlayout = QVBoxLayout()
+        self.inputgrid = QGridLayout()
+        self.inputwidget = QWidget()
+        self.inputwidget.setStyleSheet('''
+            background-color: #20232A;
+            color: #FED32C;
             padding: 10px;
             border: none;
             text-align: center;
             border-radius: 5px;
             font-size: 20px;
              ''')
+        self.lbl = QLabel(f"Страница настройки", alignment=Qt.AlignCenter)
+        self.lbl.setStyleSheet('''
+            background-color: #20232A;
+            color: #FED32C;
+            padding: 10px;
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 20px;
+             ''')
+        for i in range(1, 9):
+            self.inputgrid.addWidget(QLabel(f"Урок {i}: ", alignment=Qt.AlignCenter), i, 0)
+            self.inputgrid.addWidget(QTimeEdit(self), i, 1)
+
+        self.inputwidget.setLayout(self.inputgrid)
+
         self.lbl.setMouseTracking(True)
-        self.layout.addWidget(self.lbl)
-        self.setLayout(self.layout)
+        self.settingboxlayout.addWidget(self.lbl)
+        self.settingboxlayout.addWidget(self.inputwidget)
+        self.setLayout(self.settingboxlayout)
 
        
 
