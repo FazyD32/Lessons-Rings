@@ -19,9 +19,9 @@ class SlideMenu(QWidget):
         btn.clicked.connect(self.parent.switch_page)
         btn.setStyleSheet('''
             background-color: #f7fafa;
-            color: blue;
+            color: #FED32C;
             padding: 10px;
-            border: none;
+            border: 3px solid #E6C02C;
             text-align: center;
             border-radius: 5px;
             font-size: 20px;
@@ -39,10 +39,10 @@ class RightWidget(QWidget):
         self.lbl_time = QLabel("Время")
         self.lbl_time.setAlignment(Qt.AlignHCenter)
         self.lbl_time.setStyleSheet('''
-            background-color: #f7fafa;
-            color: blue;
+            background-color: #252932;
+            color: #FED32C;
             padding: 10px;
-            border: none;
+            border: 3px solid #E6C02C;
             text-align: center;
             border-radius: 5px;
             font-size: 20px;
@@ -52,10 +52,10 @@ class RightWidget(QWidget):
         self.lbl_time2 = QLabel("Дата")
         self.lbl_time2.setAlignment(Qt.AlignHCenter)
         self.lbl_time2.setStyleSheet('''
-            background-color: #f7fafa;
-            color: blue;
+            background-color: #252932;
+            color: #FED32C;
             padding: 10px;
-            border: none;
+            border: 3px solid #E6C02C;
             text-align: center;
             border-radius: 5px;
             font-size: 20px;
@@ -64,15 +64,15 @@ class RightWidget(QWidget):
 
         grid1 =QGridLayout() 
         card1 = QWidget()
-        card1.setStyleSheet('''
-            background-color: #f7fafa;
-            color: blue;
+        card1.setStyleSheet('''QWidget{
+            background-color: #252932;
+            color: #FED32C;
             padding: 10px;
-            border: none;
+            border: 3px solid #E6C02C;
             text-align: center;
             border-radius: 5px;
             font-size: 20px;
-             ''')
+             }''')
         card1.setLayout(grid1)
         card1.setFixedHeight(132)
  
@@ -89,12 +89,11 @@ class RightWidget(QWidget):
         grid2 = QGridLayout()
         card2 = QWidget()
         card2.setStyleSheet('''
-            background-color: #f7fafa;
-            color: blue;
+            background-color: #252932;
+            color: #FED32C;
             padding: 10px;
-            border: none;
+            border: 3px solid #E6C02C;
             text-align: center;
-            border-radius: 5px;
             font-size: 20px;
              ''')
         card2.setLayout(grid2)

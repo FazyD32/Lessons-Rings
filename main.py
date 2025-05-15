@@ -9,6 +9,7 @@ class MainWindow(QMainWindow):
         self.init_ui()
         self.menu = SlideMenu(self)
         self.setMouseTracking(True)
+        
 
         
     def init_ui(self):
@@ -18,12 +19,15 @@ class MainWindow(QMainWindow):
         central_layout =  QHBoxLayout()
         self.base_clock_widget = QWidget()
         self.time_widget = RightWidget()
-        self.time_widget.setFixedWidth(self.width()//3) 
+        self.time_widget.setFixedWidth(self.width()//2) 
+        self.time_widget.sizeHint()
+
 
         central_layout.addWidget(clock)
         central_layout.addWidget(self.time_widget)
         
         self.base_clock_widget.setLayout(central_layout)
+        self.base_clock_widget.setStyleSheet("background : #20232A;")
         self.base_clock_widget.setMouseTracking(True)
 
         self.settings = SettingWidget()

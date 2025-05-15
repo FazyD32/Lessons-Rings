@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtGui import QBrush, QPainter, QPen
+from PyQt5.QtGui import QBrush, QPainter, QPen, QColor
 from PyQt5.QtCore import QPoint, QTime, Qt, QTimer
 
 
@@ -37,7 +37,8 @@ class ClockWidget(QWidget): #Вместо маин виндов можно и п
 
  
         # Установить цвета, часовые и минуты, секунда красная
-        self.bColor = Qt.green
+        self.bColor = Qt.yellow
+        self.bbColor = QColor(255, 165, 0)
         self.sColor = Qt.red
  
     # Перезаписываем встроенный метод отрисовки
@@ -86,18 +87,20 @@ class ClockWidget(QWidget): #Вместо маин виндов можно и п
  
         # отрисовка стрелки 
         # Угол считается по логике: 6 * на условные 30 секунд = 180 градусов
-        drawPointer(self.sColor, (30 * (tik.hour() + tik.minute() / 60)), self.hPointer2)
-        drawPointer(self.bColor, (30 * (tik.hour() + tik.minute() / 60)), self.hPointer)
-
-        drawPointer(self.sColor, (6 * (tik.minute() + tik.second() / 60)), self.mPointer2)
-        drawPointer(self.bColor, (6 * (tik.minute() + tik.second() / 60)), self.mPointer)
-
         drawPointer(self.sColor, (6*tik.second()), self.sPointer) 
 
+        drawPointer(self.bbColor, (30 * (tik.hour() + tik.minute() / 60)), self.hPointer2)
+        drawPointer(self.bColor, (30 * (tik.hour() + tik.minute() / 60)), self.hPointer)
+
+        drawPointer(self.bbColor, (6 * (tik.minute() + tik.second() / 60)), self.mPointer2)
+        drawPointer(self.bColor, (6 * (tik.minute() + tik.second() / 60)), self.mPointer)
+
+        
+
         #Ручка рисует контур, а кисть сплошняком
-        painter.setBrush(QBrush(Qt.cyan))
-        painter.setPen(QPen(Qt.blue))
-        painter.drawEllipse(-5, -5, 10, 10)
+        painter.setBrush(QBrush(Qt.red))
+        painter.setPen(QPen(QColor(255, 165, 0)))
+        painter.drawEllipse(-4, -4, 9, 9)
  
         # Отрисовать задний фон, но не работает
         painter.setPen(QPen(self.sColor))
@@ -111,7 +114,8 @@ class ClockWidget(QWidget): #Вместо маин виндов можно и п
                 painter.drawLine(87, 0, 97, 0)
             painter.rotate(6)
 
-        painter.setPen(QPen(Qt.blue))
+        painter.setPen(QPen(QColor(255, 165, 0)))
+        painter.setBrush(QBrush(Qt.red))
     
         painter.drawText(82-3, 4, str(3))
         painter.drawText(-3, 87-3, str(6))
