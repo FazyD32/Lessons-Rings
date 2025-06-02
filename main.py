@@ -1,18 +1,22 @@
 from PyQt5.QtWidgets import QWidget, QMainWindow, QApplication, QHBoxLayout, QStackedWidget
-# from PyQt5.QtCore import Qt, QTimer
 from clock import ClockWidget
 from mywidgets import RightWidget, SlideMenu, SettingWidget
+from PyQt5.QtCore import Qt
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.showFullScreen()
+        self.showMaximized()
         self.init_ui()
         self.menu = SlideMenu(self)
         self.setMouseTracking(True)
-        
        
     def init_ui(self):
+        self.setWindowFlags(
+            Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+
         self.setWindowTitle("Lessons & Rings")
         self.setGeometry(100, 100, 800, 600)
 
@@ -39,7 +43,6 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.pages)  
         
-
     def switch_page(self):
         # Переключение на следующую страницу
         new_index = (self.pages.currentIndex() + 1) % self.pages.count()
@@ -53,9 +56,9 @@ class MainWindow(QMainWindow):
         else:
             self.menu.hide()
 
-
 if __name__ == "__main__":
     app = QApplication([])
     window = MainWindow()
     window.show()
     app.exec_()
+
