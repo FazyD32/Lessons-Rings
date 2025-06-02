@@ -12,10 +12,11 @@ class MainWindow(QMainWindow):
         self.init_ui()
         self.menu = SlideMenu(self)
         self.setMouseTracking(True)
+        self.setStyleSheet("background : #20232A;")
        
     def init_ui(self):
         self.setWindowFlags(
-            Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+            Qt.FramelessWindowHint)
 
         self.setWindowTitle("Lessons & Rings")
         self.setGeometry(100, 100, 800, 600)
