@@ -1,0 +1,51 @@
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QTimeEdit, QTextEdit, QLineEdit, QHBoxLayout
+from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QPoint
+
+class SlideMenu(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
+        self.init_ui()
+        self.hide()
+
+    def init_ui(self):
+        # Настройка внешнего вида меню
+        self.setGeometry(6, 6, self.parent.width(), 50)
+        self.setStyleSheet('''background-color: rgba(40, 40, 40, 200);
+                            color: #ffffff;
+                            border: 1px solid #555555;
+                            border-radius: 12px;
+                            padding: 20px;''')
+
+        # Кнопка для демонстрации функционала
+        self.btn = QPushButton("Следующая страница", self)
+        self.btn.clicked.connect(self.parent.switch_page)
+        self.btn.setStyleSheet("""
+        QPushButton {
+            background-color: #46484B;
+            color: #FED32C;
+            border: 2px solid #A98C1D;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+
+        }
+        QPushButton:hover {
+            background-color: #9B9DA0;
+
+        }
+        QPushButton:pressed {
+            background-color: #9B9DA0;
+            border-top: 3px solid #3e8e41;
+            border-left: 3px solid #3e8e41;
+            border-right: 1px solid #3e8e41;
+            border-bottom: 1px solid #3e8e41;
+        }
+        QPushButton:disabled {
+            background-color: ##FED32C;
+            border-color: ##FED32C;
+            color: ##FED32C;
+        }
+        """)
+        
