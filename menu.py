@@ -17,10 +17,6 @@ class SlideMenu(QWidget):
                             border-radius: 12px;
                             padding: 20px;''')
 
-        self.lay = QHBoxLayout()
-        # self.setLayout(self.lay)
-        # self.lay.addWidget(self.btn)
-
         # Кнопка для демонстрации функционала
         self.btn = QPushButton("Следующая страница", self)
         self.btn.clicked.connect(self.parent.switch_page)
@@ -33,3 +29,4 @@ class SlideMenu(QWidget):
             border-radius: 5px;
             font-size: 20px;
              ''')
+        

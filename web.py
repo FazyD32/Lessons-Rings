@@ -6,7 +6,7 @@ from PyQt5.QtCore import QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
-class ClockWidget(QWidget): #Вместо маин виндов можно и просто виджет
+class WebWidget(QWidget): #Вместо маин виндов можно и просто виджет
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Qt Web Browser")

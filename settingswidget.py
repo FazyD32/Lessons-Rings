@@ -1,18 +1,20 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from pygame import mixer
 
 class Ui_SettingWidget(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setMouseTracking(True)
+        self.set_settings()
+
+       
 
     def setupUi(self, SettingWidget):
         lblStyle = '''
-            background-color: #252932;
             color: #FED32C;
              '''
         style = '''QWidget{
-            background-color: #252932;
             color: #FED32C;
             padding: 10px;
             border: 3px solid #E6C02C;
@@ -59,8 +61,7 @@ class Ui_SettingWidget(QtWidgets.QWidget):
         self.verticalLayout.setObjectName("verticalLayout")
 
         self.WebWidgetSetting.setStyleSheet('''QWidget#WebWidgetSetting{
-            background-color: #252932;
-            color: #FED32C;
+  
             padding: 10px;
             border: 3px solid #E6C02C;
             border-radius: 5px;}
@@ -148,8 +149,6 @@ class Ui_SettingWidget(QtWidgets.QWidget):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
 
         self.AudioResWidget.setStyleSheet('''QWidget#AudioResWidget{
-            background-color: #252932;
-            color: #FED32C;
             padding: 10px;
             border: 3px solid #E6C02C;
             border-radius: 5px;}
@@ -184,6 +183,37 @@ class Ui_SettingWidget(QtWidgets.QWidget):
         self.PlayButton.setMouseTracking(True)
 
         self.verticalLayout_2.addWidget(self.PlayButton)
+
+        self.PlayButton.setStyleSheet("""
+        QPushButton {
+            background-color: #4CAF50;
+            color: white;
+            border: 2px solid #3e8e41;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+
+        }
+        QPushButton:hover {
+            background-color: #45a049;
+
+        }
+        QPushButton:pressed {
+            background-color: #3d8b40;
+            border-top: 3px solid #3e8e41;
+            border-left: 3px solid #3e8e41;
+            border-right: 1px solid #3e8e41;
+            border-bottom: 1px solid #3e8e41;
+        }
+        QPushButton:disabled {
+            background-color: #cccccc;
+            border-color: #aaaaaa;
+            color: #888888;
+        }
+        """)
+
+        self.PlayButton.clicked.connect(self.play_audio)
 
         #Надпись разрешение
         self.ResolutionLabel = QtWidgets.QLabel(self.AudioResWidget)
@@ -984,7 +1014,35 @@ class Ui_SettingWidget(QtWidgets.QWidget):
         self.SaveBtn.setObjectName("SaveBtn")
         self.horizontalLayout_3.addWidget(self.SaveBtn)
 
-        self.SaveBtn.setStyleSheet(style)
+        self.SaveBtn.setStyleSheet("""
+        QPushButton {
+            background-color: #4CAF50;
+            color: white;
+            border: 2px solid #3e8e41;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+
+        }
+        QPushButton:hover {
+            background-color: #45a049;
+
+        }
+        QPushButton:pressed {
+            background-color: #3d8b40;
+            border-top: 3px solid #3e8e41;
+            border-left: 3px solid #3e8e41;
+            border-right: 1px solid #3e8e41;
+            border-bottom: 1px solid #3e8e41;
+        }
+        QPushButton:disabled {
+            background-color: #cccccc;
+            border-color: #aaaaaa;
+            color: #888888;
+        }
+        """)
+        self.SaveBtn.clicked.connect(self.save_data)
 
         #Спейсер
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -1068,4 +1126,261 @@ class Ui_SettingWidget(QtWidgets.QWidget):
         self.LessTab.setTabText(self.LessTab.indexOf(self.Sut), _translate("SettingWidget", "Суббота"))
         self.SaveBtn.setText(_translate("SettingWidget", "Сохранить"))
 
+    def save_data(self):
+        with open("monday.txt", "w", encoding="UTF-8") as file:
+            mass = []
+            mass.append(self.mEdit1.text())
+            mass.append(self.mEdit2.text())
+            mass.append(self.mEdit3.text())
+            mass.append(self.mEdit4.text())
+            mass.append(self.mEdit5.text())
+            mass.append(self.mEdit6.text())
+            mass.append(self.mEdit7.text())
+            for i in mass:
+                file.write(i+'|')
+
+        with open("tuesday.txt", "w", encoding="UTF-8") as file:
+            mass = []
+            mass.append(self.tEdit1.text())
+            mass.append(self.tEdit2.text())
+            mass.append(self.tEdit3.text())
+            mass.append(self.tEdit4.text())
+            mass.append(self.tEdit5.text())
+            mass.append(self.tEdit6.text())
+            mass.append(self.tEdit7.text())
+            for i in mass:
+                file.write(i+'|')
+
+        with open("wenthday.txt", "w", encoding="UTF-8") as file:
+            mass = []
+            mass.append(self.wEdit1.text())
+            mass.append(self.wEdit2.text())
+            mass.append(self.wEdit3.text())
+            mass.append(self.wEdit4.text())
+            mass.append(self.wEdit5.text())
+            mass.append(self.wEdit6.text())
+            mass.append(self.wEdit7.text())
+            for i in mass:
+                file.write(i+'|')
+
+        with open("thutterday.txt", "w", encoding="UTF-8") as file:
+            mass = []
+            mass.append(self.thEdit1.text())
+            mass.append(self.thEdit2.text())
+            mass.append(self.thEdit3.text())
+            mass.append(self.thEdit4.text())
+            mass.append(self.thEdit5.text())
+            mass.append(self.thEdit6.text())
+            mass.append(self.thEdit7.text())
+            for i in mass:
+                file.write(i+'|')
+
+        with open("friday.txt", "w", encoding="UTF-8") as file:
+            mass = []
+            mass.append(self.fEdit1.text())
+            mass.append(self.fEdit2.text())
+            mass.append(self.fEdit3.text())
+            mass.append(self.fEdit4.text())
+            mass.append(self.fEdit5.text())
+            mass.append(self.fEdit6.text())
+            mass.append(self.fEdit7.text())
+            for i in mass:
+                file.write(i+'|')
+
+        with open("sutturday.txt", "w", encoding="UTF-8") as file:
+            mass = []
+            mass.append(self.sEdit1.text())
+            mass.append(self.sEdit2.text())
+            mass.append(self.sEdit3.text())
+            mass.append(self.sEdit4.text())
+            mass.append(self.sEdit5.text())
+            mass.append(self.sEdit6.text())
+            mass.append(self.sEdit7.text())
+            for i in mass:
+                file.write(i+'|')
+
+        with open("websetting.txt", "w", encoding="UTF-8") as file:
+            d = self.BrowserBool.isChecked()
+            c = self.urlEdit.text()
+            file.write(str(d)+'|')
+            file.write(c+'|')
+
+    def set_settings(self):
+            with open("monday.txt", "r", encoding="UTF-8") as file:
+                try:
+                    d = file.read().split('|')
+                    d = d[:-1]
+                    s = []
+                    for i in d:
+                        if len(i) < 5:
+                            s.append('0'+i)
+                        else:
+                            s.append(i)
+                    time = QtCore.QTime.fromString(s[0])
+                    self.mEdit1.setTime(time)
+                    time = QtCore.QTime.fromString(s[1])
+                    self.mEdit2.setTime(time)
+                    time = QtCore.QTime.fromString(s[2])
+                    self.mEdit3.setTime(time)
+                    time = QtCore.QTime.fromString(s[3])
+                    self.mEdit4.setTime(time)
+                    time = QtCore.QTime.fromString(s[4])
+                    self.mEdit5.setTime(time)
+                    time = QtCore.QTime.fromString(s[5])
+                    self.mEdit6.setTime(time)
+                    time = QtCore.QTime.fromString(s[6])
+                    self.mEdit7.setTime(time)
+                except Exception:
+                    pass
+
+            with open("wenthday.txt", "r", encoding="UTF-8") as file:
+                try:
+                    d = file.read().split('|')
+                    d = d[:-1]
+                    s = []
+                    for i in d:
+                        if len(i) < 5:
+                            s.append('0'+i)
+                        else:
+                            s.append(i)
+                    time = QtCore.QTime.fromString(s[0])
+                    self.wEdit1.setTime(time)
+                    time = QtCore.QTime.fromString(s[1])
+                    self.wEdit2.setTime(time)
+                    time = QtCore.QTime.fromString(s[2])
+                    self.wEdit3.setTime(time)
+                    time = QtCore.QTime.fromString(s[3])
+                    self.wEdit4.setTime(time)
+                    time = QtCore.QTime.fromString(s[4])
+                    self.wEdit5.setTime(time)
+                    time = QtCore.QTime.fromString(s[5])
+                    self.wEdit6.setTime(time)
+                    time = QtCore.QTime.fromString(s[6])
+                    self.wEdit7.setTime(time)
+                except Exception:
+                    pass
+
+            with open("tuesday.txt", "r", encoding="UTF-8") as file:
+                try:
+                    d = file.read().split('|')
+                    d = d[:-1]
+                    s = []
+                    for i in d:
+                        if len(i) < 5:
+                            s.append('0'+i)
+                        else:
+                            s.append(i)
+                    time = QtCore.QTime.fromString(s[0])
+                    self.thEdit1.setTime(time)
+                    time = QtCore.QTime.fromString(s[1])
+                    self.tEdit2.setTime(time)
+                    time = QtCore.QTime.fromString(s[2])
+                    self.tEdit3.setTime(time)
+                    time = QtCore.QTime.fromString(s[3])
+                    self.tEdit4.setTime(time)
+                    time = QtCore.QTime.fromString(s[4])
+                    self.tEdit5.setTime(time)
+                    time = QtCore.QTime.fromString(s[5])
+                    self.tEdit6.setTime(time)
+                    time = QtCore.QTime.fromString(s[6])
+                    self.tEdit7.setTime(time)
+                except Exception:
+                    pass
+
+            with open("thutterday.txt", "r", encoding="UTF-8") as file:
+                try:
+                    d = file.read().split('|')
+                    d = d[:-1]
+                    s = []
+                    for i in d:
+                        if len(i) < 5:
+                            s.append('0'+i)
+                        else:
+                            s.append(i)
+                    time = QtCore.QTime.fromString(s[0])
+                    self.thEdit1.setTime(time)
+                    time = QtCore.QTime.fromString(s[1])
+                    self.thEdit2.setTime(time)
+                    time = QtCore.QTime.fromString(s[2])
+                    self.thEdit3.setTime(time)
+                    time = QtCore.QTime.fromString(s[3])
+                    self.thEdit4.setTime(time)
+                    time = QtCore.QTime.fromString(s[4])
+                    self.thEdit5.setTime(time)
+                    time = QtCore.QTime.fromString(s[5])
+                    self.thEdit6.setTime(time)
+                    time = QtCore.QTime.fromString(s[6])
+                    self.thEdit7.setTime(time)
+                except Exception:
+                    pass
+
+            with open("friday.txt", "r", encoding="UTF-8") as file:
+                try:
+                    d = file.read().split('|')
+                    d = d[:-1]
+                    s = []
+                    for i in d:
+                        if len(i) < 5:
+                            s.append('0'+i)
+                        else:
+                            s.append(i)
+                    time = QtCore.QTime.fromString(s[0])
+                    self.fEdit1.setTime(time)
+                    time = QtCore.QTime.fromString(s[1])
+                    self.fEdit2.setTime(time)
+                    time = QtCore.QTime.fromString(s[2])
+                    self.fEdit3.setTime(time)
+                    time = QtCore.QTime.fromString(s[3])
+                    self.fEdit4.setTime(time)
+                    time = QtCore.QTime.fromString(s[4])
+                    self.fEdit5.setTime(time)
+                    time = QtCore.QTime.fromString(s[5])
+                    self.fEdit6.setTime(time)
+                    time = QtCore.QTime.fromString(s[6])
+                    self.fEdit7.setTime(time)
+                except Exception:
+                    pass
+
+            with open("sutturday.txt", "r", encoding="UTF-8") as file:
+                try:
+                    d = file.read().split('|')
+                    d = d[:-1]
+                    s = []
+                    for i in d:
+                        if len(i) < 5:
+                            s.append('0'+i)
+                        else:
+                            s.append(i)
+                    time = QtCore.QTime.fromString(s[0])
+                    self.sEdit1.setTime(time)
+                    time = QtCore.QTime.fromString(s[1])
+                    self.sEdit2.setTime(time)
+                    time = QtCore.QTime.fromString(s[2])
+                    self.sEdit3.setTime(time)
+                    time = QtCore.QTime.fromString(s[3])
+                    self.sEdit4.setTime(time)
+                    time = QtCore.QTime.fromString(s[4])
+                    self.sEdit5.setTime(time)
+                    time = QtCore.QTime.fromString(s[5])
+                    self.sEdit6.setTime(time)
+                    time = QtCore.QTime.fromString(s[6])
+                    self.sEdit7.setTime(time)
+                except Exception:
+                    pass    
+
+            with open("websetting.txt", "r", encoding="UTF-8") as file:
+                try:
+                    data = file.read().split('|')
+                    data = data[:-1]
+                    if data[0] == 'True':
+                        self.BrowserBool.setChecked(True)
+                    self.CurrentURLLabel.setText(data[1])
+                    self.urlEdit.setText(data[1])
+                except Exception:
+                    pass
+
+    def play_audio(self):
+        mixer.init()
+        mixer.music.load("ring.mp3")
+        mixer.music.play()
 

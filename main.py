@@ -1,7 +1,11 @@
 from clock import ClockWidget
 from menu import SlideMenu
+from web import WebWidget
 from settingswidget import Ui_SettingWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
+import schedule
+import time
+import datetime
 
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
@@ -9,6 +13,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.setupUi(self)
         self.setMouseTracking(True)
+        self.useweb = False
 
     def setupUi(self, MainWindow):
         self.menu = SlideMenu(self)
@@ -56,8 +61,21 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.horizontalLayout_8.addWidget(self.ClockForWidget)
 
         #Виджет самих часов
-        self.clock = ClockWidget()
-        self.LayForClock.addWidget(self.clock)
+        with open("websetting.txt", "r", encoding="UTF-8") as file:
+            data = file.read().split('|')
+            data = data[:-1]
+
+            if data[0] == 'False':
+                self.useweb = False
+            else:
+                self.useweb = True
+        
+        if self.useweb == False:
+            self.clock = ClockWidget()
+            self.LayForClock.addWidget(self.clock)
+        else:
+            self.web = WebWidget()
+            self.LayForClock.addWidget(self.web)
 
         #Правый виджет
         self.LessnsWidget = QtWidgets.QWidget(self.centralwidget)
@@ -458,6 +476,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         #Многостраничное приложение     
         self.pages = QtWidgets.QStackedWidget()
         self.pages.setMouseTracking(True)
+        self.pages.setStyleSheet('background : #20232A;')
         self.pages.addWidget(self.centralwidget)
         self.pages.addWidget(self.settings)
 
@@ -465,6 +484,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -493,17 +514,329 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def switch_page(self):
         # Переключение на следующую страницу
         new_index = (self.pages.currentIndex() + 1) % self.pages.count()
-        self.pages.setCurrentIndex(new_index)   
+        self.pages.setCurrentIndex(new_index)  
+
+    
+
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.current_lsns = []
+        self.weekdays = {'monday':'Понедельник',
+                         'tuesday':'Вторник',
+                         "wednesday":"Среда",
+                         "thursday":"Четверг",
+                         "friday":"Пятница",
+                         "saturday":"Суббота",
+                         "sunday":"Воскресенье"}
+        self.nowtime = ''
+        self.ringflag = True
+
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.ui.menu.setParent(self)
+        self.setMouseTracking(True)
+
+        schedule.every().monday.at("00:01").do(self.set_m_lessns)
+        schedule.every().tuesday.at("00:01").do(self.set_t_lessns)
+        schedule.every().wednesday.at("00:01").do(self.set_w_lessns)
+        schedule.every().thursday.at("00:01").do(self.set_th_lessns)
+        schedule.every().friday.at("00:01").do(self.set_f_lessns)
+        schedule.every().saturday.at("00:01").do(self.set_s_lessns)
+
+        self.today = time.strftime("%A").lower()
+        if self.today == "monday":
+            self.set_m_lessns()
+        elif self.today == "tuesday":
+            self.set_t_lessns()
+        elif self.today == "wednesday":
+            self.set_w_lessns()
+        elif self.today == "thursday":
+            self.set_th_lessns()
+        elif self.today == "friday":
+            self.set_f_lessns()
+        elif self.today == "saturday":
+            self.set_s_lessns()
+
+        #Таймер
+        self.cnt = 0
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.update_data)
+        self.timer.start(1000)
 
     def mouseMoveEvent(self, event):
-        print('11')
+        pos = event.windowPos().toPoint()
+        y = pos.y()
+        if y < 40:
+            self.ui.menu.show()
+        else:
+            self.ui.menu.hide()
+
+    def update_data(self):
+        schedule.run_pending()
+        self.ui.TimeLbl.setText(str(self.cnt))
+        self.ui.weekDayLbl.setText(self.weekdays[self.today])
+
+        curtime = str(datetime.datetime.now().time()).split('.')
+        curtime = curtime[:-1]
+        curtime = curtime[0]
+        self.nowtime = str(curtime)
+
+        self.ui.TimeLbl.setText(str(curtime))
+
+        self.ui.DateLbl.setText(str(datetime.datetime.now().date()))
+
+        nowtimemass = self.nowtime.split(':')
+        self.nowtime = int(nowtimemass[0])*3600+int(nowtimemass[1])*60+int(nowtimemass[2])
+
+        secondslessnsmass = []
+        for i in self.current_lsns:
+            scnds = i.split(':')           
+            scnds = int(scnds[0])*3600+int(scnds[1])*60
+            secondslessnsmass.append(scnds)
+
+        if secondslessnsmass[0]<=self.nowtime and self.nowtime<secondslessnsmass[1]:
+            if self.ringflag:
+                self.ui.settings.play_audio()
+                self.ringflag = False
+            elif self.ui.LblPeremena.text()[-1] != '1':
+                self.ringflag = True
+            self.ui.LblPeremena.setText('Урок 1')
+            h = (secondslessnsmass[1]-self.nowtime)//3600
+            rs = (secondslessnsmass[1]-self.nowtime)%3600
+            m = rs//60
+            s = rs%60
+            self.ui.LblTimeTo.setText(f'До урока 2 осталось: {h}:{m}:{s}')
+        elif secondslessnsmass[1]<=self.nowtime and self.nowtime<secondslessnsmass[2]:
+            if self.ringflag:
+                self.ui.settings.play_audio()
+                self.ringflag = False
+            elif self.ui.LblPeremena.text()[-1] != '2':
+                self.ringflag = True
+            self.ui.LblPeremena.setText('Урок 2')
+            h = (secondslessnsmass[2]-self.nowtime)//3600
+            rs = (secondslessnsmass[2]-self.nowtime)%3600
+            m = rs//60
+            s = rs%60
+            self.ui.LblTimeTo.setText(f'До урока 3 осталось: {h}:{m}:{s}')
+        elif secondslessnsmass[2]<=self.nowtime and self.nowtime<secondslessnsmass[3]:
+            if self.ringflag:
+                self.ui.settings.play_audio()
+                self.ringflag = False
+            elif self.ui.LblPeremena.text()[-1] != '3':
+                self.ringflag = True
+            self.ui.LblPeremena.setText('Урок 3')
+            h = (secondslessnsmass[3]-self.nowtime)//3600
+            rs = (secondslessnsmass[3]-self.nowtime)%3600
+            m = rs//60
+            s = rs%60
+            self.ui.LblTimeTo.setText(f'До урока 4 осталось: {h}:{m}:{s}')
+        elif secondslessnsmass[3]<=self.nowtime and self.nowtime<secondslessnsmass[4]:
+            if self.ringflag:
+                self.ui.settings.play_audio()
+                self.ringflag = False
+            elif self.ui.LblPeremena.text()[-1] != '4':
+                self.ringflag = True
+            self.ui.LblPeremena.setText('Урок 4')
+            h = (secondslessnsmass[4]-self.nowtime)//3600
+            rs = (secondslessnsmass[4]-self.nowtime)%3600
+            m = rs//60
+            s = rs%60
+            self.ui.LblTimeTo.setText(f'До урока 5 осталось: {h}:{m}:{s}')
+        elif secondslessnsmass[4]<=self.nowtime and self.nowtime<secondslessnsmass[5]:
+            if self.ringflag:
+                self.ui.settings.play_audio()
+                self.ringflag = False
+            elif self.ui.LblPeremena.text()[-1] != '5':
+                self.ringflag = True
+            self.ui.LblPeremena.setText('Урок 5')
+            h = (secondslessnsmass[5]-self.nowtime)//3600
+            rs = (secondslessnsmass[5]-self.nowtime)%3600
+            m = rs//60
+            s = rs%60
+            self.ui.LblTimeTo.setText(f'До урока 6 осталось: {h}:{m}:{s}')
+        elif secondslessnsmass[5]<=self.nowtime and self.nowtime<secondslessnsmass[6]:
+            if self.ringflag:
+                self.ui.settings.play_audio()
+                self.ringflag = False
+            elif self.ui.LblPeremena.text()[-1] != '6':
+                self.ringflag = True
+            self.ui.LblPeremena.setText('Урок 6')
+            h = (secondslessnsmass[6]-self.nowtime)//3600
+            rs = (secondslessnsmass[6]-self.nowtime)%3600
+            m = rs//60
+            s = rs%60
+            self.ui.LblTimeTo.setText(f'До урока 7 осталось: {h}:{m}:{s}')
+        elif secondslessnsmass[6]<=self.nowtime<secondslessnsmass[0]:
+            if self.ringflag:
+                self.ui.settings.play_audio()
+                self.ringflag = False
+            elif self.ui.LblPeremena.text()[-1] != '7':
+                self.ringflag = True
+            self.ui.LblPeremena.setText('Урок 7')
+            h = (secondslessnsmass[0]-self.nowtime)//3600
+            rs = (secondslessnsmass[0]-self.nowtime)%3600
+            m = rs//60
+            s = rs%60
+            self.ui.LblTimeTo.setText(f'До урока 1 осталось: {h}:{m}:{s}')
+
+        # print(secondslessnsmass)
+        
+
+
+        
+
+    def set_m_lessns(self):
+        with open("monday.txt", "r", encoding="UTF-8") as file:
+            d = file.read().split('|')
+            d = d[:-1]
+            s = []
+            for i in d:
+                if len(i) < 5:
+                    s.append('0'+i)
+                else:
+                    s.append(i)
+
+            self.ui.Time1.setText(s[0])
+            self.ui.Time2.setText(s[1])
+            self.ui.Time3.setText(s[2])
+            self.ui.Time4.setText(s[3])
+            self.ui.Time5.setText(s[4])
+            self.ui.Time6.setText(s[5])
+            self.ui.Time7.setText(s[6])
+
+            for i in s:
+                self.current_lsns.append(i)
+
+            # print(self.current_lsns)
+
+    def set_t_lessns(self):
+        with open("tuesday.txt", "r", encoding="UTF-8") as file:
+            d = file.read().split('|')
+            d = d[:-1]
+            s = []
+            for i in d:
+                if len(i) < 5:
+                    s.append('0'+i)
+                else:
+                    s.append(i)
+
+            self.ui.Time1.setText(s[0])
+            self.ui.Time2.setText(s[1])
+            self.ui.Time3.setText(s[2])
+            self.ui.Time4.setText(s[3])
+            self.ui.Time5.setText(s[4])
+            self.ui.Time6.setText(s[5])
+            self.ui.Time7.setText(s[6])
+
+            for i in s:
+                self.current_lsns.append(i)
+
+            # print(self.current_lsns)
+
+    def set_w_lessns(self):
+        with open("wenthday.txt", "r", encoding="UTF-8") as file:
+            d = file.read().split('|')
+            d = d[:-1]
+            s = []
+            for i in d:
+                if len(i) < 5:
+                    s.append('0'+i)
+                else:
+                    s.append(i)
+
+            self.ui.Time1.setText(s[0])
+            self.ui.Time2.setText(s[1])
+            self.ui.Time3.setText(s[2])
+            self.ui.Time4.setText(s[3])
+            self.ui.Time5.setText(s[4])
+            self.ui.Time6.setText(s[5])
+            self.ui.Time7.setText(s[6])
+
+            for i in s:
+                self.current_lsns.append(i)
+
+            # print(self.current_lsns)
+
+    def set_th_lessns(self):
+        with open("thutterday.txt", "r", encoding="UTF-8") as file:
+            d = file.read().split('|')
+            d = d[:-1]
+            s = []
+            for i in d:
+                if len(i) < 5:
+                    s.append('0'+i)
+                else:
+                    s.append(i)
+
+            self.ui.Time1.setText(s[0])
+            self.ui.Time2.setText(s[1])
+            self.ui.Time3.setText(s[2])
+            self.ui.Time4.setText(s[3])
+            self.ui.Time5.setText(s[4])
+            self.ui.Time6.setText(s[5])
+            self.ui.Time7.setText(s[6])
+
+            for i in s:
+                self.current_lsns.append(i)
+
+            # print(self.current_lsns)
+
+    def set_f_lessns(self):
+        with open("friday.txt", "r", encoding="UTF-8") as file:
+            d = file.read().split('|')
+            d = d[:-1]
+            s = []
+            for i in d:
+                if len(i) < 5:
+                    s.append('0'+i)
+                else:
+                    s.append(i)
+
+            self.ui.Time1.setText(s[0])
+            self.ui.Time2.setText(s[1])
+            self.ui.Time3.setText(s[2])
+            self.ui.Time4.setText(s[3])
+            self.ui.Time5.setText(s[4])
+            self.ui.Time6.setText(s[5])
+            self.ui.Time7.setText(s[6])
+
+            for i in s:
+                self.current_lsns.append(i)
+
+            # print(self.current_lsns)
+
+    def set_s_lessns(self):
+        with open("sutturday.txt", "r", encoding="UTF-8") as file:
+            d = file.read().split('|')
+            d = d[:-1]
+            s = []
+            for i in d:
+                if len(i) < 5:
+                    s.append('0'+i)
+                else:
+                    s.append(i)
+
+            self.ui.Time1.setText(s[0])
+            self.ui.Time2.setText(s[1])
+            self.ui.Time3.setText(s[2])
+            self.ui.Time4.setText(s[3])
+            self.ui.Time5.setText(s[4])
+            self.ui.Time6.setText(s[5])
+            self.ui.Time7.setText(s[6])
+
+            for i in s:
+                self.current_lsns.append(i)
+
+            # print(self.current_lsns)
+
+        
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    window = MainWindow()  # Используем наш новый класс
+    window.show()
     sys.exit(app.exec_())
