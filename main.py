@@ -33,16 +33,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
 
-        self.centralwidget.setStyleSheet('''background : #20232A;''')
-
-        # MainWindow.setStyleSheet("""QMainWindow#MainWindow{
-        #     background-image: url(background);
-        #     background-position: center;
-        #     background-repeat: no-repeat;
-        #     background-attachment: fixed;
-        #     background-size: cover;}
-        # """)
-
         #Виджет для часов
         self.ClockForWidget = QtWidgets.QWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -122,7 +112,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.weekDayLbl.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 42px;
+            font-size: 64px;
             font-style: bold;
              ''')
 
@@ -137,7 +127,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.DateLbl.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 32px;
+            font-size: 48px;
              ''')
 
         #Надпись времени
@@ -152,7 +142,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.TimeLbl.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 32px;
+            font-size: 56px;
              ''')
 
         #Виджет для текущего статуса
@@ -186,7 +176,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.LblNow.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 42px;
+            font-size: 68px;
             font-style: bold;
              ''')
 
@@ -201,7 +191,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.LblPeremena.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 32px;
+            font-size: 48px;
              ''')
 
         #Надпись до урока осталось
@@ -216,7 +206,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.LblTimeTo.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 32px;
+            font-size: 48px;
              ''')
         
         #Виджет для расписания
@@ -236,7 +226,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
 
         self.WidgetLessns.setStyleSheet('''QWidget#WidgetLessns{
-            background-color: #252932;
             color: #FED32C;
             padding: 10px;
             border: 3px solid #E6C02C;
@@ -254,7 +243,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Les1.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
             font-style: bold;
              ''')
 
@@ -272,7 +261,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Time1.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
              ''')
 
         #Урок 2
@@ -286,7 +275,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Les2.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
             font-style: bold;
              ''')
 
@@ -304,7 +293,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Time2.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
              ''')
 
         #Урок 3
@@ -318,7 +307,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Les3.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
             font-style: bold;
              ''')
 
@@ -336,7 +325,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Time3.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
              ''')
 
         #Урок 4
@@ -350,7 +339,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Les4.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
             font-style: bold;
              ''')
 
@@ -368,7 +357,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Time4.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
              ''')
 
         #урок 5
@@ -382,7 +371,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Les5.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
             font-style: bold;
              ''')
 
@@ -400,7 +389,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Time5.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
              ''')
 
         #Урок 6
@@ -414,7 +403,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Les6.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
             font-style: bold;
              ''')
 
@@ -432,7 +421,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Time6.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
              ''')
 
         #Урок 7
@@ -451,7 +440,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Les7.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
             font-style: bold;
              ''')
 
@@ -470,13 +459,25 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.Time7.setStyleSheet('''
             color: #FED32C;
             text-align: center;
-            font-size: 24px;
+            font-size: 48px;
              ''')
 
         #Многостраничное приложение     
         self.pages = QtWidgets.QStackedWidget()
         self.pages.setMouseTracking(True)
-        self.pages.setStyleSheet('background : #20232A;')
+        try:
+            self.pages.setStyleSheet("""
+                .QStackedWidget{
+                    background : #20232A;
+                    border-image: url(background) 0 0 0 0 stretch stretch;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-attachment: fixed;
+                }
+            """)
+        except Exception:
+            self.pages.setStyleSheet('background : #20232A;')
+
         self.pages.addWidget(self.centralwidget)
         self.pages.addWidget(self.settings)
 
@@ -516,8 +517,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         new_index = (self.pages.currentIndex() + 1) % self.pages.count()
         self.pages.setCurrentIndex(new_index)  
 
-    
-
+    def close(self):
+        app = QtWidgets.QApplication.instance()
+        if app:
+            # Закрываем все окна и завершаем приложение
+            for window in app.topLevelWindows():
+                window.close()
+            app.quit()
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):

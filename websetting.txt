@@ -1,1 +1,1 @@
-True|https://sch5-gusev.gosuslugi.ru/roditelyam-i-uchenikam/novosti/|
+False|https://sch5-gusev.gosuslugi.ru/roditelyam-i-uchenikam/novosti/|
